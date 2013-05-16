@@ -1,0 +1,7 @@
+26/3: Turned off root ssh access:
+1.  Edit /etc/ssh/sshd_config.  Change the line that says "PermitRootLogin yes" to read PermitRootLogin no".
+2. Run the command "/etc/init.d/ssh  restart". To restart sshd.
+
+26/3: Install mysqld
+sudo apt-get install mysql-server
+changed mysql-root password
