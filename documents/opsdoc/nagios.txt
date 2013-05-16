@@ -1,0 +1,58 @@
+16/4:
+Installed nagios3:
+sudo apt-get install nagios3
+Still have to play aound with the config files...
+
+26/4:
+Got nagios to monitor on the db server (fixing a problem where it wasn't
+accessible from root@192.168...., as described in:
+http://www.thegeekstuff.com/2010/08/allow-mysql-client-connection/
+Most of this was just following Tom's notes from class.
+
+27/4:
+Installed Nagios NRPE plugin:
+sudo apt-get install nagios-nrpe-plugin
+- this is for monitoring remote services on other servers.
+Added:
+define host{
+  use   generic-host
+  host_name     groupa-db
+  alias         db
+  address       192.168.2.102
+}
+
+define service{
+  use   generic-service
+  host_name     groupa-db
+  service_description Disk Space
+  check_command check_nrpe_1arg!check_disk
+}
+to conf.d/db_host.cfg to define the db host and remote service "Disk Space"
+and restarted nagios.
+
+28/4:
+Installed NSClient++ on group-ad (our windows server)
+Configured nagios to monitor the client via the check_nt plugin. This is 
+described at :
+http://awaseroot.wordpress.com/2012/11/23/monitoring-windows-with-nagios/
+- copied windows.cfg from /usr/share/... to /etc/nagios3/objects
+and modified appropriately. Also added templates.cfg in the same place (as
+described in the link) which defines the windows-server host type.
+Also changed command in nt.cfg to:
+define command {
+  command_name check_nt
+  command_line /usr/lib/nagios/plugins/check_nt -H $HOSTADDRESS$ -s YOUR_PASSWORD -v $ARG1$ $ARG2$
+}
+and modified nagios.cfg by uncommenting the lines:
+cfg_file=/etc/nagios3/objects/templates.cfg
+cfg_file=/etc/nagios3/objects/windows.cfg
+Commented out most of the other services and just left the check_version one
+running.
+
+7/5:
+Reconfigured email to work with nagios:
+dpkg-reconfigure exim4-config
+- did this. However, nagios still doesn't seem to be sending out emails!?
+Also enabled external commands (from the web interface) in nagios, as 
+described in:
+http://www.ghacks.net/2010/04/05/nagios-enable-external-commands/

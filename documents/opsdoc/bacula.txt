@@ -1,0 +1,44 @@
+Bacula:
+9/4/13: Installed bacula client and server:
+apt-get install bacula-server
+apt-get install bacula-client
+and changed config files:
+/etc/bacula/bacula-sd.conf: FileStorage->/home/bacula/storage
+/etc/bacula/bacula-dir.conf: RestoreFiles->/home/bacula/storage
+/etc/bacula/bacula-dir.conf: FileSet->/home/bacula/data_to_backup
+and restart director and client:
+/etc/init.d/bacula-director reload
+/etc/init.d/bacula-sd restart
+Then enter bconsole. Type 'label' -> menu: pick 'File' option and enter name of storage volume. Finally, type 'run' in bconsole to start the backup.
+To restore files type 'restore all' in bconsole -> pick option 5. Then bacula
+asks which files to restore enter 'done' to restore everything.
+Note that bacula has 3 daemons: director, file daemon, and storage daemon. Only
+the
+file daemon bacula-fd, along with its config file bacula-fd.conf, need to be on
+machines to be backed up.
+
+13/4/13:
+Played around with the bacula conf files to get the backup working on the
+db server. Note
+1. Test connections between servers with telnet, e.g.
+telnet 198.169.2.101 9102
+etc.
+2. Comment out refernces to DirAddress=..., FDAddress=..., SDAddress=...
+in the conf files. These are optional and give which ip the fd/sd/dir listen
+to, i.e. without these fields the daemon will accept connections from any ip.
+3. Make sure the name and passwords are the same in dir and fd conf files.
+
+18/4:
+Configured the bacula-dir to work with the group-ad-fd client. Haven't checked
+the restore yet. Checked the restore and works fine! Note that we had quite a 
+bit of trouble getting the fd service running on the windows server - didn't
+appear as a process. In the end we reinstalled and it worked fine.
+
+25/4:
+Fixed problem with bacula's backup of MyCatalog. Didn't notice this error
+before - it appeared some time when I was configuring the db/ad servers. This 
+error is described at:
+http://www.mail-archive.com/bacula-users@lists.sourceforge.net/msg39535.html
+- essentially changed ownership of dbcheck and bacula-dir.conf as instructed
+and now seems to work fine. I'm not even sure when and hopw this problem
+started, because the catalog seemed to backup initially ok.

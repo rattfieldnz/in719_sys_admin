@@ -1,0 +1,144 @@
+9/4/13:
+Installed bacula client and server:
+apt-get install bacula-server
+apt-get install bacula-client
+and changed config files:
+/etc/bacula/bacula-sd.conf: FileStorage->/home/bacula/storage
+/etc/bacula/bacula-dir.conf: RestoreFiles->/home/bacula/storage
+/etc/bacula/bacula-dir.conf: FileSet->/home/bacula/data_to_backup
+and restart director and client:
+/etc/init.d/bacula-director reload
+/etc/init.d/bacula-sd restart
+Then enter bconsole. Type 'label' -> menu: pick 'File' option and enter name of storage volume. Finally, type 'run' in bconsole to start the backup.
+To restore files type 'restore all' in bconsole -> pick option 5. Then bacula 
+asks which files to restore enter 'done' to restore everything.
+Note that bacula has 3 daemons: director, file daemon, and storage daemon. Only
+the
+file daemon bacula-fd, along with its config file bacula-fd.conf, need to be on
+machines to be backed up.
+
+11/4/13:
+Installed sudo
+Added users hegargm1 and attfire1 and made sudoers
+
+12/4/13:
+Added user tclark and made sudoer
+
+13/4/13:
+Played around with the bacula conf files to get the backup working on the
+db server. Note
+1. Test connections between servers with telnet, e.g.
+telnet 198.169.2.101 9102
+etc.
+2. Comment out refernces to DirAddress=..., FDAddress=..., SDAddress=...
+in the conf files. These are optional and give which ip the fd/sd/dir listen
+to, i.e. without these fields the daemon will accept connections from any ip.
+3. Make sure the name and passwords are the same in dir and fd conf files.
+
+16/4:
+Installed nagios3:
+sudo apt-get install nagios3
+Still have to play aound with the config files...
+
+17/4:
+Got the group-ad-fd working on the windows server. Have to configure this server
+so that it will do a backup.
+
+18/4:
+Configured the bacula-dir to work with the group-ad-fd client. Haven't checked 
+the restore yet.
+
+25/4:
+Fixed problem with bacula's backup of MyCatalog. This error is 
+described at:
+http://www.mail-archive.com/bacula-users@lists.sourceforge.net/msg39535.html
+- essentially changed ownership of dbcheck and bacula-dir.conf as instructed
+and now seems to work fine. I'm not even sure when and hopw this problem 
+started, because the catalog seemed to backup initially ok.
+
+26/4:
+Got nagios to monitor on the db server (fixing a problem where it wasn't
+accessible from root@192.168...., as described in:
+http://www.thegeekstuff.com/2010/08/allow-mysql-client-connection/
+
+27/4:
+Installed Nagios NRPE plugin:
+sudo apt-get install nagios-nrpe-plugin
+- this is for monitoring remote services on other servers.
+
+28/4:
+Installed NSClient++ on group-ad (windows) server and configured Nagios on this
+machine to monitor services on it.
+
+29/4:
+Wrote the opsdoc for nagios in opsdoc/nagios.txt (Also put the bacula one
+in the same directory).
+
+30/4:
+Played around with the config of bacula again
+1. Got DB backing up to the storage server (also checked restore)
+- the following bit of the manual is useful for this:
+http://www.bacula.org/en/dev-manual/main/main/Basic_Volume_Management.html
+2. Playing around with the mysqldump. Haven't got it working yet, but problem
+is described at:
+http://www.ctrl-alt-del.cc/2008/08/backing-up-mysql-with-daily-snapshots-and-bacula.html
+and
+http://wiki.bacula.org/doku.php?id=application_specific_backups:mysql
+I'll have another go at this (and getting the rest of things backed up properly
+tomorrow.
+
+7/5:
+First class back. Tom went over a few nagios things in class. The first was
+how to schedule regular jobs with the "cron" command (and one-off jobs with
+the "at" command).
+Also showed us a way to fix email (wasn't configured correctly), i.e.
+dpkg-reconfigure exim4-config
+- did this. However, nagios still doesn't seem to be sending out emails!?
+Also enabled external commands in nagios, as described in:
+http://www.ghacks.net/2010/04/05/nagios-enable-external-commands/
+
+10/5:
+Configured bacula to backup all jobs to the storage server. Need to check this
+over the weekend to make sure it runs ok. Also need to make sure all the 
+necessary files are backed up (check with Tom for a comprehensive list). 
+Also modified nagios config so that it now notifies my local email on this
+server (apparently Tom's going to set up a relay to stop it being blocked
+by spam filters - because it comes from nagios@debian.local).
+Installed git on this (mgmt) server and initialized ~/coderepo
+
+11/5:
+Updated nagios config so that it now monitors the storage server as well.
+Also added linux servers to the Debian/Linux hostgroup - now the icons
+appear in the web front-end (including the windows one).
+Added db and storage servers to the ssh-servers and debian-servers groups.
+
+14/5:
+Installed ntp and ntpdate to correct the time
+apt-get install ntp
+apt-get install ntpdate
+Updated /etc/hosts to include hosts on the local network and copied the same
+to the db hosts file
+Installed puppetmaster on this server:
+sudo apt-get install puppetmaster
+Changed the file /etc/puppet/puppet.conf by adding the lines:
+[master]
+certname=mgmt.groupi.sqrawler.com
+and then restarted the puppetmaster as per instructions. Rob installed the 
+client on the db server. Had some problems initially with the certificates
+by using commands like:
+sudo puppetca --clean {client=groupa-db}
+sudo puppetca -s groupa-db
+etc.
+
+15/5:
+I've been looking at password manager/safe programs today. I tried:
+keepassx
+keysafe
+pwsafe
+on our mgmt server. I removed the first 2 as they require a GUI. pwsafe seems 
+a simple way to go and it's got good help. Found some good tips at:
+http://www.debian-administration.org/users/yaarg/weblog/3
+I installed this:
+sudo apt-get install pwsafe
+The other option is to store passwords in a text file and encrypt with gnupg, 
+or something like that.

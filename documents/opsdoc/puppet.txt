@@ -1,0 +1,13 @@
+14/5:
+Installed puppetmaster on this server:
+sudo apt-get install puppetmaster
+Changed the file /etc/puppet/puppet.conf by adding the lines:
+[master]
+certname=mgmt.groupi.sqrawler.com
+and then restarted the puppetmaster as per instructions. Rob installed the
+client on the db server. Had some problems initially with the certificates
+by using commands like:
+sudo puppetca --clean {client=groupa-db}
+sudo puppetca -s groupa-db
+etc.
+

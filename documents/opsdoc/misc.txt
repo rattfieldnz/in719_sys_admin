@@ -1,0 +1,83 @@
+GIT:
+cd coderepo
+git init
+git pull https://github.com/hegargm1/in719_sys_admin.git
+git add answerfile.txt
+git commit
+git push https://github.com/hegargm1/in719_sys_admin.git master
+
+git push https://github.com/hegargm1/in719_sys_admin.git master
+git push --help
+git pull
+git pull https://github.com/hegargm1/in719_sys_admin.git
+ls
+cd in719_sys_admin/
+ls
+git pull https://github.com/hegargm1/in719_sys_admin.git
+cd ..
+git pull https://github.com/hegargm1/in719_sys_admin.git
+git push https://github.com/hegargm1/in719_sys_admin.git master
+ls
+cd in719_sys_admin/
+ls
+cd ..
+git add sshd_config
+ls
+git push https://github.com/hegargm1/in719_sys_admin.git master
+man git-add
+git pull https://github.com/hegargm1/in719_sys_admin.git
+git push https://github.com/hegargm1/in719_sys_admin.git master
+man git-commit
+git commit
+git push https://github.com/hegargm1/in719_sys_admin.git master
+git add sudoers
+ls
+ls -al
+chown hegargm1 sudoers
+sudo chown hegargm1 sudoers
+ls
+git add sudoers
+git commit
+git push https://github.com/hegargm1/in719_sys_admin.git master
+cd /etc
+cd ssh
+vi ssh_config
+cd
+cd coderepo/
+ls
+cd in719_sys_admin/
+ls
+cd ..
+ls
+vi answerfile.txt
+git add answerfile.txt
+ls
+man git
+git describe
+git commit
+git push https://github.com/hegargm1/in719_sys_admin.git master
+ls
+git pull https://github.com/rattfieldnz/in719_sys_admin.git
+ls
+git add windows/
+mv answerfile.txt windows/
+mkdir db
+ls
+mv sshd_config db
+mv sudoers db
+ls
+git add db
+ls
+git commit
+git push https://github.com/hegargm1/in719_sys_admin.git master
+cd
+ls
+mv OpsDocs.docx coderepo/
+mv WorkLog.docx coderepo/
+ls
+cd coderepo/
+ls
+git add OpsDocs.docx
+git add WorkLog.docx
+git commit
+git push https://github.com/hegargm1/in719_sys_admin.git master
